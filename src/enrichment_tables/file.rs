@@ -166,6 +166,11 @@ impl FileConfig {
                             )
                             .into(),
                     ),
+                    (Some("regexp"), None) | (Some("regex"), None) => {
+                        let regexp = regex::Regex::new(value)
+                            .map_err(|err| format!("could not create regex: {err}"))?;
+                        Value::Regex(regexp.into())
+                    }
                     _ => {
                         let conversion =
                             Conversion::parse(format, timezone).map_err(|err| err.to_string())?;
